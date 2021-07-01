@@ -209,6 +209,7 @@ void menuforward(){
     page_counter = 2;
     delay(100);
     buttonPressed = "Nothing";
+    Serial.print("1st page");
     Serial.println("button returned to default");
   }
 }
@@ -216,9 +217,13 @@ void menuforward(){
 // exits my choice selection function
 void choiceselection() {
   if(buttonPressed != "Nothing" && page_counter == 2){
-    cprandom ();
+    cpretrieve ();
+    while (cpSelection == "Nothing"){
+      cpretrieve ();
+    }
     
     buttonPressed = "Nothing";
+    Serial.print("2nd page");
     Serial.println("button returned to default");
     page_counter = 3;
   }
@@ -227,6 +232,8 @@ void choiceselection() {
 void cpselection(){
   if(buttonPressed != "Nothing" && page_counter == 3) {
     buttonPressed = "Nothing";
+    Serial.print("3rd page");
+    Serial.println("button returned to default");
     page_counter = 4;
 }
 }
@@ -249,6 +256,7 @@ void resultscreen (){
       analogWrite(greenPin, 100);
       Serial.println("user Tied");
     }
+     Serial.print("4th page");
   }
 }
 //return to 1st page function
@@ -259,15 +267,15 @@ void returnfunction (){
     mySelection = "Nothing";
     cpSelection = "Nothing";
     analogWrite(redPin, LOW);
-      analogWrite(greenPin, LOW);
+     analogWrite(greenPin, LOW);
+     Serial.print("5th page");
   }
 }
 
 //cp randomizer function, if buttonPressed is anything, generate a random result(tie, win, loss), then make result dictate computer's choice.
-void cprandom (){
-    resultText = resultOutcomes[random(0,3)]; //generates outcome from a random function
-  if(buttonPressed == "Rock" && page_counter == 2 ){
- 
+void cpretrieve (){
+  resultText = resultOutcomes[random(0,3)]; //generates outcome from a random function
+  if(mySelection == "Rock" && page_counter == 2){
     if(resultText == "Tied"){
       cpSelection = "Rock";
     }
@@ -278,8 +286,7 @@ void cprandom (){
       cpSelection = "Scissors";
     }
   }
-  else if(buttonPressed == "Paper" && page_counter == 2) {
-     
+  else if(mySelection == "Paper" && page_counter == 2) {
     if(resultText == "Tied"){
       cpSelection = "Paper";
     }
@@ -290,8 +297,7 @@ void cprandom (){
       cpSelection = "Rock";
     }
   }
-  else if( buttonPressed == "Scissors" && page_counter == 2) {
-  
+  else if(mySelection == "Scissors" && page_counter == 2) {
     if(resultText == "Tied"){
       cpSelection = "Scissors";
     }
@@ -324,7 +330,6 @@ void loop() {
 menuforward ();
 choiceselection();
 cpselection();
-
 resultscreen ();
 returnfunction();
 
